@@ -19,6 +19,7 @@
 #include "Graph.h"
 
 using namespace std;
+<<<<<<< HEAD
 /*
 Graph::Graph(){
     m_nodes = vector<Node>();
@@ -26,6 +27,19 @@ Graph::Graph(){
 }*/
 
 Graph::Graph(const string& file){
+=======
+
+
+Graph::Graph(const string & file, bool dir){
+    Directed = dir;
+    m_nodes = vector<Node>();
+    m_adjList = vector<list<Node> >();
+    scan(file);
+}
+
+Graph::Graph(const string& file){
+    Directed = false;
+>>>>>>> origin/master
     m_nodes = vector<Node>();
     m_adjList = vector<list<Node> >();
     scan(file);
@@ -49,6 +63,25 @@ void Graph::addEdge ( const Node & a , const Node & b ) {
         }
             m_adjList[a.id()].push_back(b);
     }
+<<<<<<< HEAD
+=======
+    if(Directed == false){
+        if( getAdjNodes(b).empty() ){
+            getAdjNodes(b).push_back(a);
+        }
+        else if(!NodeExistAdj( a, b.id() ) ){
+            list<Node> adjList = getAdjNodes(b);
+            for(list<Node>::iterator itr = adjList.begin(); itr != adjList.end(); ++itr){
+                if(*itr > a){
+                    //--itr;
+                    m_adjList[b.id()].insert(itr,a);
+                    return;
+                }
+            }
+                m_adjList[b.id()].push_back(a);
+        }
+    }
+>>>>>>> origin/master
 }
 
 //Insert a node a to m_nodes

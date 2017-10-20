@@ -18,10 +18,18 @@ class Graph{
     private:
         vector<Node> m_nodes;
         vector< list<Node> > m_adjList;
+<<<<<<< HEAD
+=======
+        bool Directed;
+>>>>>>> origin/master
     public:
         friend ostream& operator<<(ostream & out, const Graph & g); //defined
 
         Graph(const string & file);
+<<<<<<< HEAD
+=======
+        Graph(const string & file, bool dir);
+>>>>>>> origin/master
 
         //Insert a edge ( a , b ) to m_adjList
         void addEdge ( const Node & a , const Node & b ) ;//defined - need to check
@@ -42,6 +50,10 @@ class Graph{
         Node & getNode ( size_t i ) ; //defined
 
         const Node & getNode ( size_t i ) const; //defined
+<<<<<<< HEAD
+=======
+        Node & getNode(size_t i);
+>>>>>>> origin/master
 
         // Return reference of the adjacency list of node a
         list <Node> & getAdjNodes ( const Node & a );//defined

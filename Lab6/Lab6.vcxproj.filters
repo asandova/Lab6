@@ -33,6 +33,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+<<<<<<< HEAD
   <ItemGroup>
     <Text Include="Graph1.txt">
       <Filter>Resource Files</Filter>
@@ -44,4 +45,6 @@
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
+=======
+>>>>>>> origin/master
 </Project>

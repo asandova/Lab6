@@ -61,9 +61,18 @@ void DFSRecursive(Graph & G){ /// Recursive DFS algorithm
 }
 
 void DFSItative(Graph & G){ /// Iterative DFS algorithm
+<<<<<<< HEAD
     ///use stacks
 
     stack<Node> dfs;
+=======
+    ///uses stacks
+
+    stack<Node> dfs;
+    if(G.num_nodes() == 0){
+        return;
+    }
+>>>>>>> origin/master
     G.getNode(0).setPreTime(GTime++);
     dfs.push( G.getNode( 0 ) );
     while(!dfs.empty()){
@@ -99,6 +108,7 @@ void Explore(Graph & G, Node & C){
 
 void testall(){
 
+<<<<<<< HEAD
     Graph Tgraph1("Graph1.txt");
     cout << Tgraph1 << endl;
     Graph Tgraph2("Graph2.txt");
@@ -106,6 +116,15 @@ void testall(){
     Tgraph1.save("Graph1out.txt");
     Tgraph2.save("Graph2out.txt");
     Tgraph3.save("Graph3out.txt");
+=======
+    Graph Tgraph1("Graph1.txt",1);
+    cout << Tgraph1 << endl;
+    //Graph Tgraph2("Graph2.txt",1);
+    //Graph Tgraph3("Graph3.txt",1);
+    //Tgraph1.save("Graph1out.txt");
+    //Tgraph2.save("Graph2out.txt");
+    //Tgraph3.save("Graph3out.txt");
+>>>>>>> origin/master
 
 
     ///test linear
