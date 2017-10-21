@@ -19,16 +19,6 @@
 #include "Graph.h"
 
 using namespace std;
-<<<<<<< HEAD
-/*
-Graph::Graph(){
-    m_nodes = vector<Node>();
-    m_adjList = vector<list<Node> > ();
-}*/
-
-Graph::Graph(const string& file){
-=======
-
 
 Graph::Graph(const string & file, bool dir){
     Directed = dir;
@@ -39,7 +29,7 @@ Graph::Graph(const string & file, bool dir){
 
 Graph::Graph(const string& file){
     Directed = false;
->>>>>>> origin/master
+
     m_nodes = vector<Node>();
     m_adjList = vector<list<Node> >();
     scan(file);
@@ -49,23 +39,34 @@ void Graph::addEdge ( const Node & a , const Node & b ) {
     //the addEdge will add node b to node a's adj list if
         //the node is not already in the list
             //and inserts the nodes in alphabetical order
-    if( getAdjNodes(a).empty() ){
+	cout << "adding edge:" << a << " to " << b << endl;
+	if( getAdjNodes(a).empty() ){
         getAdjNodes(a).push_back(b);
+		cout << "created edge: " << a << " to " << b << endl;
+		if (Directed)
+			return;
     }
     else if(!NodeExistAdj( b, a.id() ) ){
         list<Node> adjList = getAdjNodes(a);
+		if (adjList.front() > b) {
+			adjList.push_front(b);
+			cout << "created edge: " << a << " to " << b << endl;
+			return;
+		}
         for(list<Node>::iterator itr = adjList.begin(); itr != adjList.end(); ++itr){
-            if(*itr > b){
-                //--itr;
-                m_adjList[a.id()].insert(itr,b);
+			if(*itr > b){
+				m_adjList[a.id()].insert(itr,b);
+				cout << "created edge: " << a << " to " << b << endl;
                 return;
             }
         }
             m_adjList[a.id()].push_back(b);
+			if (Directed)
+				return;
     }
-<<<<<<< HEAD
-=======
-    if(Directed == false){
+	cout << "edge " << a << " to " << b << " already exists" << endl;
+	//adds the edge from B to A if the graph is undirected
+    if(!Directed){
         if( getAdjNodes(b).empty() ){
             getAdjNodes(b).push_back(a);
         }
@@ -76,28 +77,43 @@ void Graph::addEdge ( const Node & a , const Node & b ) {
                     //--itr;
                     m_adjList[b.id()].insert(itr,a);
                     return;
-                }
-            }
+                }//end of if
+            }//end of for loop
                 m_adjList[b.id()].push_back(a);
-        }
-    }
->>>>>>> origin/master
-}
+        }//end of else if
+    }//end of if directed
+
+}//end of add edge
 
 //Insert a node a to m_nodes
 void Graph::addNode ( const Node & a ) {
     ///add the node to the Graph's node vector
     ///if the node does not already exist
     //checking is the node is already in the vector
-    if( !NodeExist(a.name() ) ){
+	cout << "adding Node " << a << endl;
+	if (m_nodes.empty()) {
+		m_nodes.push_back(a);
+		list<Node> adj = list<Node>();
+		m_adjList.push_back(adj);
+		return;
+	}
+    else if( !NodeExist(a.name() ) ){
+		list<Node> adj = list<Node>();
+		m_adjList.push_back(adj);
+
         //m_nodes.reserve( m_nodes.size() + 1 );
         //m_nodes [ a.id( ) ] = a ;
-        m_nodes.push_back(a);
-        list<Node>adj;
-        m_adjList.push_back(adj);
+		for (vector<Node>::iterator itr = m_nodes.begin(); itr != m_nodes.end(); ++itr) {
+			if (*itr > a) {
+				m_nodes.insert(itr, a);
+				return;
+			}
+		}
+		m_nodes.push_back(a);
+		return;//for debug
     }
+	cout << "Node " << a << " already exists" << endl;
 }
-
 
 bool Graph::NodeExistAdj(const Node& a, size_t id)const{
     ///checks if node a is in the adj list for the node with the ID value of id
@@ -132,11 +148,13 @@ size_t Graph::findID(const string & name)const{
 }
 
 // Return node with id equal to i
-Node & Graph::getNode ( size_t i ){
-    return m_nodes[ i ] ;
-}
+
 const Node & Graph::getNode ( size_t i )const{
     return m_nodes[ i ] ;
+}
+
+Node & Graph::getNode(size_t i) {
+	return m_nodes[i];
 }
 
 // Return reference of the adjacency list of node a
@@ -195,22 +213,29 @@ void Graph::scan ( const string & file ){
                 vector<string>names(2);
                 names[0] = fline.c_str()[0];
                 names[1] = fline.c_str()[2];
-
+				cout << endl <<"read in: "<< fline << endl;
                 if(!NodeExist( names[0] ) ){
-                        Node tmp1( names[0],id++);
-                        N1 = tmp1;
-                        addNode(N1);
+                        N1 = Node( names[0],id++);
+                        //N1 = tmp1;
+						addNode(N1);
                 }else{
+					cout << "Node with name " << names[0] << " exist" << endl;
                     N1 = getNode( findID( names[0] ) ) ;
+					cout << "Existing: N1-" << N1 << endl;
                 }
+				cout << "N1: " << N1 << endl;
                 if(!NodeExist( names[1] ) ){
-                        Node tmp2( names[1] ,id++);
-                        N2 = tmp2;
+                        N2 = Node( names[1] ,id++);
+                        //N2 = tmp2;
                         addNode( N2 ) ;
                 }else{
+						cout << "Node with name" << names[1] << " exist" << endl;
                         N2 = getNode( findID( names[1] ) ) ;
                 }
+				cout << "N2: " << N2 << endl;
+				cout << N1 << endl << N2 << endl;
                 addEdge(N1, N2);
+
         }//end of while
         iFile.close();
     }else{

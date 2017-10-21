@@ -56,13 +56,12 @@ const string & Node::name()const{
 //comparison operator overloading
 
 ostream& operator<<(ostream & out, const Node & n){
-<<<<<<< HEAD
-    out << n.m_name << " " << n.m_id << endl;
-    out << n.preTime << " " << n.postTime;
-=======
-    out << n.m_name << " ID: " << n.m_id << endl;
-    out << "pre: " << n.preTime << " post: " << n.postTime;
->>>>>>> origin/master
+
+    out << n.m_name << " " << n.m_id;
+    //out << n.preTime << " " << n.postTime;
+    //out << n.m_name << " ID: " << n.m_id << endl;
+    //out << "pre: " << n.preTime << " post: " << n.postTime;
+
     return out;
 }
 
@@ -76,7 +75,9 @@ bool Node::operator==(const Node& b)const{
 bool Node::operator!=(const Node& b)const{
     return !(*this == b);
 }
-
+//operators <,> will to Lexicographical comparison based on ascii values
+//so "a" < "b" because "a" = 97, "b"=98
+//and "A" < "a" because "A" = 65, "a" = 97
 bool Node::operator<(const Node& b)const{
     if( (m_name) <  b.name())
         return true;
