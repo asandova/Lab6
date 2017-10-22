@@ -48,21 +48,21 @@ void Graph::addEdge ( const Node & a , const Node & b ) {
     }
     else if(!NodeExistAdj( b, a.id() ) ){
         list<Node> adjList = getAdjNodes(a);
-		if (adjList.front() > b) {
-			adjList.push_front(b);
+		if (m_adjList[a.id()].front() > b) {
+			m_adjList[a.id()].push_front(b);
 			cout << "created edge: " << a << " to " << b << endl;
 			return;
 		}
         for(list<Node>::iterator itr = adjList.begin(); itr != adjList.end(); ++itr){
 			if(*itr > b){
-				m_adjList[a.id()].insert(itr,b);
+				m_adjList[a.id	()].insert(itr,b);
 				cout << "created edge: " << a << " to " << b << endl;
                 return;
             }
         }
-            m_adjList[a.id()].push_back(b);
-			if (Directed)
-				return;
+        m_adjList[a.id()].push_back(b);
+		if (Directed)
+			return;
     }
 	cout << "edge " << a << " to " << b << " already exists" << endl;
 	//adds the edge from B to A if the graph is undirected
@@ -103,6 +103,8 @@ void Graph::addNode ( const Node & a ) {
 
         //m_nodes.reserve( m_nodes.size() + 1 );
         //m_nodes [ a.id( ) ] = a ;
+		m_nodes.push_back(a);
+		/*
 		for (vector<Node>::iterator itr = m_nodes.begin(); itr != m_nodes.end(); ++itr) {
 			if (*itr > a) {
 				m_nodes.insert(itr, a);
@@ -110,6 +112,7 @@ void Graph::addNode ( const Node & a ) {
 			}
 		}
 		m_nodes.push_back(a);
+		*/
 		return;//for debug
     }
 	cout << "Node " << a << " already exists" << endl;
@@ -262,8 +265,11 @@ void Graph::save( const string & file ){
 
 ostream& operator<<(ostream & out, const Graph & g){
     out << "Nodes in the graph: " << endl ;
-    for ( unsigned i =0; i <g.num_nodes ( ) ; i ++) {
-        out << g.getNode( i ).name ( ) << " ," ;
+    for ( unsigned i =0; i <g.num_nodes ( ) ; i++) {
+		if(i+1 == g.num_nodes() )
+			out << g.getNode(i).name();
+		else
+			out << g.getNode( i ).name ( ) << " ," ;
     }
     out << endl ;
     out << "Adjacency list of the graph : " << endl ;
@@ -271,8 +277,12 @@ ostream& operator<<(ostream & out, const Graph & g){
         out << "Node " << g.getNode(i).name( ) << " : ";
         const list <Node> neighbors = g.getAdjNodes ( g.getNode(i) ) ;
             for( list<Node>::const_iterator itr = neighbors.begin( ) ;
-                itr!= neighbors.end ( ) ; ++itr ) {
-                out << itr->name( ) << " (" << itr->getPreTime() << ", " << itr->getPostTime() << "), " ;
+                itr!= neighbors.end( ) ; ++itr ) {
+				list<Node>::const_iterator BEnd = itr;
+				if (++BEnd == neighbors.end()) {
+					out << itr->name() << " (" << itr->getPreTime() << ", " << itr->getPostTime() << ")";
+				}else
+					out << itr->name( ) << " (" << itr->getPreTime() << ", " << itr->getPostTime() << "), " ;
             }
         out << endl;
     }

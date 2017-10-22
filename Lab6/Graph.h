@@ -12,6 +12,8 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include "Node.h"
+
 using namespace std;
 
 class Graph{

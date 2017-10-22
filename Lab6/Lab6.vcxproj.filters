@@ -10,12 +10,18 @@
     <ClCompile Include="Node.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="DFSAlgorithms.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="Graph.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DFSAlgorithms.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
