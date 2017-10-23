@@ -10,8 +10,9 @@ class DFSAlgorithms{
 		static void DFS(Graph & G);
 		static void DFSRecursive(Graph & G);
 		static void DFSIterative(Graph & G);
-		private:
-		static void Explore(Graph & G, Node & C);
+	private:
+		static const Node NulNode;
+		static void Explore(Graph & G, Node *C);
 };
 
 

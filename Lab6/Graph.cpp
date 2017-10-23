@@ -39,47 +39,50 @@ void Graph::addEdge ( const Node & a , const Node & b ) {
     //the addEdge will add node b to node a's adj list if
         //the node is not already in the list
             //and inserts the nodes in alphabetical order
-	cout << "adding edge:" << a << " to " << b << endl;
-	if( getAdjNodes(a).empty() ){
-        getAdjNodes(a).push_back(b);
-		cout << "created edge: " << a << " to " << b << endl;
+	const Node * A = &a;
+	const Node * B = &b;
+
+	cout << "adding edge:" << *A << " to " << *B << endl;
+	if( getAdjNodes(*A).empty() ){
+        getAdjNodes(*A).push_back(*B);
+		cout << "created edge: " << *A << " to " << *B << endl;
 		if (Directed)
 			return;
     }
-    else if(!NodeExistAdj( b, a.id() ) ){
-        list<Node> adjList = getAdjNodes(a);
-		if (m_adjList[a.id()].front() > b) {
-			m_adjList[a.id()].push_front(b);
-			cout << "created edge: " << a << " to " << b << endl;
+    else if(!NodeExistAdj( *B, A->id() ) ){
+        list<Node> adjList = getAdjNodes(*A);
+		if (m_adjList[A->id()].front() > *B) {
+			m_adjList[A->id()].push_front(*B);
+			cout << "created edge: " << *A << " to " << *B << endl;
 			return;
 		}
         for(list<Node>::iterator itr = adjList.begin(); itr != adjList.end(); ++itr){
-			if(*itr > b){
-				m_adjList[a.id	()].insert(itr,b);
-				cout << "created edge: " << a << " to " << b << endl;
+			if(*itr > *B){
+				m_adjList[A->id()].insert(itr,*B);
+				cout << "created edge: " << *A << " to " << *B << endl;
                 return;
             }
         }
-        m_adjList[a.id()].push_back(b);
+        m_adjList[A->id()].push_back(*B);
 		if (Directed)
 			return;
     }
 	cout << "edge " << a << " to " << b << " already exists" << endl;
 	//adds the edge from B to A if the graph is undirected
     if(!Directed){
-        if( getAdjNodes(b).empty() ){
-            getAdjNodes(b).push_back(a);
+        if( getAdjNodes(*B).empty() ){
+            getAdjNodes(*B).push_back(*A);
         }
-        else if(!NodeExistAdj( a, b.id() ) ){
-            list<Node> adjList = getAdjNodes(b);
+        else if(!NodeExistAdj( *A, B->id() ) ){
+            list<Node> adjList = getAdjNodes(*B);
             for(list<Node>::iterator itr = adjList.begin(); itr != adjList.end(); ++itr){
-                if(*itr > a){
+                if(*itr > *A){
                     //--itr;
-                    m_adjList[b.id()].insert(itr,a);
+                    m_adjList[B->id()].insert(itr,*B);
                     return;
                 }//end of if
             }//end of for loop
-                m_adjList[b.id()].push_back(a);
+                m_adjList[B->id()].push_back(*A);
         }//end of else if
     }//end of if directed
 
@@ -266,10 +269,13 @@ void Graph::save( const string & file ){
 ostream& operator<<(ostream & out, const Graph & g){
     out << "Nodes in the graph: " << endl ;
     for ( unsigned i =0; i <g.num_nodes ( ) ; i++) {
-		if(i+1 == g.num_nodes() )
-			out << g.getNode(i).name();
+		if (i + 1 == g.num_nodes()) {
+			out << g.getNode(i).name() << " (" << g.getNode(i).getPreTime() << ", "
+				<< g.getNode(i).getPostTime() << ")";
+		}
 		else
-			out << g.getNode( i ).name ( ) << " ," ;
+			out << g.getNode( i ).name ( ) << " (" << g.getNode(i).getPreTime() << ", "
+			<< g.getNode(i).getPostTime() << ")" << ", " ;
     }
     out << endl ;
     out << "Adjacency list of the graph : " << endl ;

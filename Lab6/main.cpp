@@ -17,8 +17,10 @@
 using namespace std;
 
 vector<size_t> find_connected_components(Graph & G) {
+	return vector<size_t>();
 }
 vector<size_t> find_strongly_connected_components(Graph & G) {
+	return vector<size_t>();
 }
 
 
@@ -35,13 +37,13 @@ void testall(){
 
     ///test linear
 	DFSAlgorithms::GTime = 1;
-	DFSAlgorithms::DFSIterative(Tgraph1);
-    cout << DFSAlgorithms::GTime << endl;
-    cout << Tgraph1 << endl;
+	//DFSAlgorithms::DFSIterative(Tgraph1);
+    //cout << DFSAlgorithms::GTime << endl;
+    //cout << Tgraph1 << endl;
     ///test recursive
     //GTime = 1;
-    //DFSRecursive(Tgraph2);
-    //cout << Tgraph2 << endl;
+    DFSAlgorithms::DFSRecursive(Tgraph1);
+    cout << "Graph after DFS algorithm:"<< endl << Tgraph1 << endl;
     ///test iterative
     //GTime = 1;
     //DFSItative(Tgraph3);
