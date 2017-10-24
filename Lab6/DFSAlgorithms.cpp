@@ -13,6 +13,7 @@ void DFSAlgorithms::DFS(Graph & G) { ///linear time DFS algorithm
 	for (size_t i = 0; i < G.num_nodes(); i++) { ///finds unexplored node
 		if (G.getNode(i).getPreTime() == 0) { ///checks if Node with ID i is unexplored
 			G.getNode(i).setPreTime(GTime++); ///sets pretime of unexplored node
+
 			list<Node> adj = G.getAdjNodes(G.getNode(i));/// gets the adjacency list
 			for (list<Node>::iterator itr = adj.begin(); itr != adj.end(); ++itr) { ///looks for next unexplored node connected to current node
 				if (itr->getPreTime() == 0) {///check if node in list is unexplored
@@ -36,11 +37,6 @@ void DFSAlgorithms::DFSRecursive(Graph & G) { /// Recursive DFS algorithm
 		if (G.getNode(i).getPreTime() == 0) {
 			if (*starting > G.getNode(i)) {
 				starting = &G.getNode(i);
-				//starting->setPreTime(GTime++);
-				//Explore(G, starting);
-				//starting->setPostTime(GTime++);
-				//DFSRecursive(G);
-				//return;
 			}//end of if
 		}//end of if
 	}//end of for

@@ -19,7 +19,7 @@ using namespace std;
 class Graph{
     private:
         vector<Node> m_nodes;
-        vector< list<Node> > m_adjList;
+        vector< list< const Node* > > m_adjList;
         bool Directed;
 
     public:
