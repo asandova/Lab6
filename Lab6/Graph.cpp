@@ -23,7 +23,7 @@ using namespace std;
 Graph::Graph(const string & file, bool dir){
     Directed = dir;
     m_nodes = vector<Node>();
-    m_adjList = vector<list<const Node*> >();
+    m_adjList = vector<list<Node> >();
     scan(file);
 }
 
@@ -31,37 +31,40 @@ Graph::Graph(const string& file){
     Directed = false;
 
     m_nodes = vector<Node>();
-    m_adjList = vector<list<Node*> >();
+    m_adjList = vector<list<Node> >();
     scan(file);
+}
+
+void Graph::update(){
+	for (size_t i = 0; i < m_nodes.size(); i++) {
+		for (list<Node>::iterator itr = m_adjList[i].begin(); itr != m_adjList[i].end(); ++itr) {
+			*itr = m_nodes[itr->id()];
+		}
+	}
 }
 //Insert a edge ( a ,b ) to m_adjList
 void Graph::addEdge ( const Node & a , const Node & b ) {
     //the addEdge will add node b to node a's adj list if
         //the node is not already in the list
             //and inserts the nodes in alphabetical order
-
-	const Node* p = &b;
-
-	cout << "adding edge:" << a << " to " << b << endl;
-	if( m_adjList[ a.id()].empty() ){
-		m_adjList[a.id()].push_back(p);
-
-		cout << "created edge: " << a << " to " << b << endl;
+	//cout << "adding edge:" << a << " to " << b << endl;
+	if( m_adjList[ a.id() ].empty() ){
+		m_adjList[ a.id() ].push_back(b);
+		//cout << "created edge: " << a << " to " << b << endl;
 		if (Directed)
 			return;
     }
     else if(!NodeExistAdj( b, a.id() ) ){
         //list<Node*> adjList = getAdjNodes(a);
-		
-		if ( m_adjList[a.id()].front() > b) {
+		if ( m_adjList[ a.id() ].front() > b ) {
 			m_adjList[a.id()].push_front(b);
-			cout << "created edge: " << a << " to " << b << endl;
+			//cout << "created edge: " << a << " to " << b << endl;
 			return;
 		}
         for(list<Node>::iterator itr = m_adjList[ a.id() ].begin(); itr != m_adjList[ a.id() ].end(); ++itr){
 			if(*itr > b){
 				m_adjList[a.id()].insert(itr,b);
-				cout << "created edge: " << a << " to " << b << endl;
+				//cout << "created edge: " << a << " to " << b << endl;
                 return;
             }
         }
@@ -69,18 +72,18 @@ void Graph::addEdge ( const Node & a , const Node & b ) {
 		if (Directed)
 			return;
     }
-	cout << "edge " << a << " to " << b << " already exists" << endl;
+	//cout << "edge " << a << " to " << b << " already exists" << endl;
 	//adds the edge from B to A if the graph is undirected
     if(!Directed){
-        if( m_adjList[a.id()].empty() ){
-            m_adjList[a.id()].push_back(a);
+        if( m_adjList[b.id()].empty() ){
+            m_adjList[b.id()].push_back(a);
         }
         else if(!NodeExistAdj( a, b.id() ) ){
             list<Node> adjList = getAdjNodes(b);
-            for(list<Node>::iterator itr = adjList.begin(); itr != adjList.end(); ++itr){
+            for(list<Node>::iterator itr = m_adjList[b.id()].begin(); itr != m_adjList[a.id()].end(); ++itr){
                 if(*itr > a){
                     //--itr;
-                    m_adjList[b.id()].insert(itr,b);
+                    m_adjList[b.id()].insert(itr,a);
                     return;
                 }//end of if
             }//end of for loop
@@ -95,7 +98,7 @@ void Graph::addNode ( const Node & a ) {
     ///add the node to the Graph's node vector
     ///if the node does not already exist
     //checking is the node is already in the vector
-	cout << "adding Node " << a << endl;
+	//cout << "adding Node " << a << endl;
 	if (m_nodes.empty()) {
 		m_nodes.push_back(a);
 		list<Node> adj = list<Node>();
@@ -105,22 +108,10 @@ void Graph::addNode ( const Node & a ) {
     else if( !NodeExist(a.name() ) ){
 		list<Node> adj = list<Node>();
 		m_adjList.push_back(adj);
-
-        //m_nodes.reserve( m_nodes.size() + 1 );
-        //m_nodes [ a.id( ) ] = a ;
 		m_nodes.push_back(a);
-		/*
-		for (vector<Node>::iterator itr = m_nodes.begin(); itr != m_nodes.end(); ++itr) {
-			if (*itr > a) {
-				m_nodes.insert(itr, a);
-				return;
-			}
-		}
-		m_nodes.push_back(a);
-		*/
 		return;//for debug
     }
-	cout << "Node " << a << " already exists" << endl;
+	//cout << "Node " << a << " already exists" << endl;
 }
 
 bool Graph::NodeExistAdj(const Node& a, size_t id)const{
@@ -134,6 +125,7 @@ bool Graph::NodeExistAdj(const Node& a, size_t id)const{
 }
 
 bool Graph::NodeExist(const string& name)const{
+	if (m_nodes.empty()) { return false; }
     Node curr;
     for(size_t i = 0; i < m_nodes.size(); i++){
         curr = getNode(i);
@@ -145,6 +137,7 @@ bool Graph::NodeExist(const string& name)const{
 }
 
 size_t Graph::findID(const string & name)const{
+
     Node curr;
     for(size_t i = 0; i < m_nodes.size(); i++){
         curr = getNode(i);
@@ -221,27 +214,27 @@ void Graph::scan ( const string & file ){
                 vector<string>names(2);
                 names[0] = fline.c_str()[0];
                 names[1] = fline.c_str()[2];
-				cout << endl <<"read in: "<< fline << endl;
+				//cout << endl <<"read in: "<< fline << endl;
                 if(!NodeExist( names[0] ) ){
-                        N1 = Node( names[0],id++);
+                        N1 = Node( names[0],id++) ;
                         //N1 = tmp1;
 						addNode(N1);
                 }else{
-					cout << "Node with name " << names[0] << " exist" << endl;
+					//cout << "Node with name " << names[0] << " exist" << endl;
                     N1 = getNode( findID( names[0] ) ) ;
-					cout << "Existing: N1-" << N1 << endl;
+					//cout << "Existing: N1-" << N1 << endl;
                 }
-				cout << "N1: " << N1 << endl;
+				//cout << "N1: " << N1 << endl;
                 if(!NodeExist( names[1] ) ){
                         N2 = Node( names[1] ,id++);
                         //N2 = tmp2;
                         addNode( N2 ) ;
                 }else{
-						cout << "Node with name" << names[1] << " exist" << endl;
+						//cout << "Node with name" << names[1] << " exist" << endl;
                         N2 = getNode( findID( names[1] ) ) ;
                 }
-				cout << "N2: " << N2 << endl;
-				cout << N1 << endl << N2 << endl;
+				//cout << "N2: " << N2 << endl;
+				//cout << N1 << endl << N2 << endl;
                 addEdge(N1, N2);
 
         }//end of while
@@ -256,7 +249,7 @@ void Graph::scan ( const string & file ){
 void Graph::save( const string & file ){
     //NOTE: the method assumes the file does not exist and will overwrite
     // if the file does exist
-        cout << "in save" << endl;
+        //cout << "in save" << endl;
         ofstream OFile;
         OFile.open(file.c_str(), ofstream::out);
         for(size_t i =0; i < m_nodes.size(); i++){

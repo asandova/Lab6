@@ -28,7 +28,7 @@ void testall(){
 
     Graph Tgraph1("Graph1.txt", true);
     cout << Tgraph1 << endl;
-    //Graph Tgraph2("Graph2.txt",1);
+    Graph Tgraph2("Graph1.txt",true);
     //Graph Tgraph3("Graph3.txt",1);
     //Tgraph1.save("Graph1out.txt");
     //Tgraph2.save("Graph2out.txt");
@@ -37,13 +37,15 @@ void testall(){
 
     ///test linear
 	DFSAlgorithms::GTime = 1;
-	//DFSAlgorithms::DFSIterative(Tgraph1);
+	DFSAlgorithms::DFSRecursive(Tgraph2);
     //cout << DFSAlgorithms::GTime << endl;
-    //cout << Tgraph1 << endl;
+	Tgraph2.update();
+	cout << "Graph after DFS algorithm Recursive:" << endl << Tgraph2 << endl;
     ///test recursive
-    //GTime = 1;
-    DFSAlgorithms::DFSRecursive(Tgraph1);
-    cout << "Graph after DFS algorithm:"<< endl << Tgraph1 << endl;
+    DFSAlgorithms::GTime = 1;
+    DFSAlgorithms::DFSIterative(Tgraph1);
+	Tgraph1.update();
+    cout << "Graph after DFS algorithm Iterative:"<< endl << Tgraph1 << endl;
     ///test iterative
     //GTime = 1;
     //DFSItative(Tgraph3);

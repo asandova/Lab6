@@ -19,12 +19,13 @@ using namespace std;
 class Graph{
     private:
         vector<Node> m_nodes;
-        vector< list< const Node* > > m_adjList;
+        vector< list< Node > > m_adjList;
         bool Directed;
 
+		
     public:
         friend ostream& operator<<(ostream & out, const Graph & g); //defined
-
+		void update();
         Graph(const string & file);
         Graph(const string & file, bool dir);
 
@@ -49,7 +50,6 @@ class Graph{
 
         const Node & getNode ( size_t i ) const; //defined
 		//Node & getNode(size_t i);
-
 
         // Return reference of the adjacency list of node a
         list <Node> & getAdjNodes ( const Node & a );//defined
