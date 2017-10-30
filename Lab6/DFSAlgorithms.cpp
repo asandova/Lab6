@@ -1,3 +1,11 @@
+/**
+*
+*CS372:	Lab5, Lab6
+*File: DFSAlogrithms.cpp
+*Author: August B. Sandoval
+*Purpose: The DFSAlogrithms.h file for Lab5, Lab6
+*
+**/
 #include "DFSAlgorithms.h"
 #include "graph.h"
 #include "node.h"
@@ -37,9 +45,8 @@ void DFSAlgorithms::DFSRecursive(Graph & G) { /// Recursive DFS algorithm
 	//once the the node is found it exits the function
 	for (size_t i = 0; i < G.num_nodes(); i++) {
 		if (G.getNode(i).getPreTime() == 0) {
-			if (*starting > G.getNode(i)) {
 				starting = &G.getNode(i);
-			}//end of if
+				break;
 		}//end of if
 	}//end of for
 	 /// only comes here is the first node in the list is first in alphabetical order and unexplored
@@ -71,26 +78,49 @@ void DFSAlgorithms::Explore(Graph & G, Node *C) {
 	//C.setPostTime(GTime++);
 }
 
-void DFSAlgorithms::DFSIterative(Graph & G) { /// Iterative DFS algorithm
-	///use stacks
-
-	stack<Node> dfs;
-	///uses stacks
+void DFSAlgorithms::DFSIterative(Graph & G) {
+	//check is the Graph is empty
 	if (G.num_nodes() == 0) { return; }
-
-	G.getNode(0).setPreTime(GTime++);
-	dfs.push(G.getNode(0));
-	while (!dfs.empty()) {
-		const list<Node> adj = G.getAdjNodes(dfs.top());
-
-		for (list<Node>::const_iterator itr = adj.begin(); itr != adj.end(); ++itr) {
-			if (G.getNode(itr->id()).getPreTime() == 0) {
-				G.getNode(itr->id()).setPreTime(GTime++);
-				dfs.push(G.getNode(itr->id()));
-				continue;
-			}//end of if
-		}//end of for loop
-		G.getNode(dfs.top().id()).setPostTime(GTime++);
-		dfs.pop();
-	}//end of while loop
-}//end of DFSIterative
+	stack<Node> dfs;
+	while (!G.allExplored()) {
+		//find next undiscovered alphabetically first node
+		Node* start = &G.getNodeAt( 0 );
+		for (size_t i = 0; i < G.num_nodes(); i++) {
+			if ( G.getNodeAt(i).getPreTime() == 0) {
+				start = &G.getNodeAt(i);
+				break;
+			}
+		}
+		//if (start->getPreTime() != 0) { return; }
+		
+		start->setPreTime(GTime++);
+		dfs.push(*start);
+		while (!dfs.empty()) {
+			G.update();
+			//find next reachable node alphabetically first
+			const list<Node> next = G.getAdjNodes(dfs.top());
+			//checks of the adj list is empty or all nodes have been discovered
+			if (next.empty() || G.allExplored( dfs.top().id() ) ) {
+				//if empty or all have been discovered sets posttime of top element
+				//pops top element of stack and continues with loop
+				G.getNode(dfs.top().id()).setPostTime(GTime++);
+				dfs.pop();
+			}
+			else {
+				//if adj list is not empty
+				//then find next node that is alphabeticaly first
+				start = &G.getNode(next.front().id());
+				for (list<Node>::const_iterator itr = next.begin(); itr != next.end(); ++itr) {
+					//checking if current node is alphabetically first compared to start and unexplored
+					if (G.getNode(itr->id()).getPreTime() == 0) {
+						start = &G.getNode(itr->id());
+						start->setPreTime(GTime++);
+						dfs.push(*start);
+						break;
+					}
+				}
+				
+			}//end of else - paired if -> if (next.empty())
+		}//end of while(!dfs.empty())
+	}//end of while (!G.allExplored())
+}//end of method

@@ -27,7 +27,7 @@ vector<size_t> find_strongly_connected_components(Graph & G) {
 void testall(){
 
     Graph Tgraph1("Graph1.txt", true);
-    cout << Tgraph1 << endl;
+    //cout << Tgraph1 << endl;
     Graph Tgraph2("Graph1.txt",true);
     //Graph Tgraph3("Graph3.txt",1);
     //Tgraph1.save("Graph1out.txt");
@@ -43,6 +43,7 @@ void testall(){
 	cout << "Graph after DFS algorithm Recursive:" << endl << Tgraph2 << endl;
     ///test recursive
     DFSAlgorithms::GTime = 1;
+	//cout << "Graph before DFS algorithm Iterative:" << endl << Tgraph1 << endl;
     DFSAlgorithms::DFSIterative(Tgraph1);
 	Tgraph1.update();
     cout << "Graph after DFS algorithm Iterative:"<< endl << Tgraph1 << endl;

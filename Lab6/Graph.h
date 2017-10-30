@@ -1,6 +1,6 @@
 /**
 *
-*CS372: Lab5
+*CS372:	Lab4, Lab5, Lab6
 *File: Graph.h
 *Author: August B. Sandoval
 *Purpose: Provides the class definition of  class Graph
@@ -18,6 +18,8 @@ using namespace std;
 
 class Graph{
     private:
+		//stores all the nodes in the graph
+		//it automaticaly alphabetically sorted
         vector<Node> m_nodes;
         vector< list< Node > > m_adjList;
         bool Directed;
@@ -28,7 +30,7 @@ class Graph{
 		void update();
         Graph(const string & file);
         Graph(const string & file, bool dir);
-
+		bool isDirected()const;
 
         //Insert a edge ( a , b ) to m_adjList
         void addEdge ( const Node & a , const Node & b ) ;//defined - need to check
@@ -46,10 +48,13 @@ class Graph{
         size_t findID(const string& name)const; //defined
 
         // Return node with id equal to i
-        Node & getNode ( size_t i ) ; //defined
+        Node & getNode ( size_t id ) ; //defined
 
-        const Node & getNode ( size_t i ) const; //defined
+        const Node & getNode ( size_t id ) const; //defined
 		//Node & getNode(size_t i);
+
+		Node & getNodeAt(size_t i);
+		const Node& getNodeAt(size_t i)const;
 
         // Return reference of the adjacency list of node a
         list <Node> & getAdjNodes ( const Node & a );//defined
@@ -58,7 +63,7 @@ class Graph{
         const list <Node> & getAdjNodes ( const Node & a ) const; //defined
 
         bool allExplored(size_t id)const;
-
+		bool allExplored()const;
         // Return the total number of nodes i n the graph
         size_t num_nodes ( ) const; //defined
 

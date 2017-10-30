@@ -1,6 +1,6 @@
 /**
 *
-*CS372: Lab5
+*CS372:	Lab4, Lab5, Lab6
 *File: Graph.cpp
 *Author: August B. Sandoval
 *Purpose: Defines the Graph class in Graph.h
@@ -33,6 +33,10 @@ Graph::Graph(const string& file){
     m_nodes = vector<Node>();
     m_adjList = vector<list<Node> >();
     scan(file);
+}
+
+bool Graph::isDirected()const {
+	return Directed;
 }
 
 void Graph::update(){
@@ -108,6 +112,12 @@ void Graph::addNode ( const Node & a ) {
     else if( !NodeExist(a.name() ) ){
 		list<Node> adj = list<Node>();
 		m_adjList.push_back(adj);
+		for (vector<Node>::iterator itr = m_nodes.begin(); itr != m_nodes.end(); ++itr) {
+			if (*itr > a) {
+				m_nodes.insert(itr, a);
+				return;
+			}
+		}
 		m_nodes.push_back(a);
 		return;//for debug
     }
@@ -149,12 +159,39 @@ size_t Graph::findID(const string & name)const{
 }
 
 // Return node with id equal to i
+//The deviation from the original for getNode is insure the correct node is returned
+//even when m_node is sorted alphabetically
+//However it does increase the runtime from constant to linear
+const Node & Graph::getNode ( size_t id )const{
 
-const Node & Graph::getNode ( size_t i )const{
-    return m_nodes[ i ] ;
+	if(id == m_nodes[id].id()  )
+		return m_nodes[id];
+
+	for (size_t i = 0; i < m_nodes.size(); i++ ) {
+		if (m_nodes[i].id() == id)
+			return m_nodes[i];
+	}
+	//should never get here
+	return Node("", 0);
 }
 
-Node & Graph::getNode(size_t i) {
+Node & Graph::getNode(size_t id) {
+	if (id == m_nodes[id].id())
+		return m_nodes[id];
+
+	for (size_t i = 0; i < m_nodes.size(); i++) {
+		if (m_nodes[i].id() == id)
+			return m_nodes[i];
+	}
+	//should never get here
+	return Node("", 0);
+}
+
+Node& Graph::getNodeAt(size_t i) {
+	return m_nodes[i];
+}
+
+const Node& Graph::getNodeAt(size_t i)const {
 	return m_nodes[i];
 }
 
@@ -169,13 +206,21 @@ const list <Node> & Graph::getAdjNodes ( const Node & a ) const{
 }
 
 bool Graph::allExplored(size_t id)const{
-    list<Node> L = getAdjNodes( getNode( id ) );
+    const list<Node> L = getAdjNodes( getNode( id ) );
     for(list<Node>::const_iterator itr = L.begin(); itr != L.end(); ++itr){
         if(itr->getPreTime() == 0){
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
+}
+
+bool Graph::allExplored()const {
+	for (size_t i = 0; i < m_nodes.size(); i++) {
+		if (!allExplored(i))
+			return false;
+	}
+	return true;
 }
 
 // Return the total number of nodes i n the graph
@@ -262,21 +307,22 @@ void Graph::save( const string & file ){
 }
 
 ostream& operator<<(ostream & out, const Graph & g){
-    out << "Nodes in the graph: " << endl ;
-    for ( unsigned i =0; i <g.num_nodes ( ) ; i++) {
+    out << "Nodes in "<< ( ( g.Directed )? "Directed" : "Undirected") << " graph: " << endl ;
+	for (unsigned i = 0; i < g.num_nodes(); i++) {
 		if (i + 1 == g.num_nodes()) {
-			out << g.getNode(i).name() << " (" << g.getNode(i).getPreTime() << ", "
-				<< g.getNode(i).getPostTime() << ")";
+			out << g.m_nodes[i].name() << " (" << g.m_nodes[i].getPreTime() << ", "
+				<< g.m_nodes[i].getPostTime() << ")";
 		}
-		else
-			out << g.getNode( i ).name ( ) << " (" << g.getNode(i).getPreTime() << ", "
-			<< g.getNode(i).getPostTime() << ")" << ", " ;
+		else {
+		out << g.m_nodes[i].name() << " (" << g.m_nodes[i].getPreTime() << ", "
+			<< g.m_nodes[i].getPostTime() << ")" << ", ";
+		}
     }
     out << endl ;
     out << "Adjacency list of the graph : " << endl ;
     for ( unsigned i =0; i <g.num_nodes( ) ; i ++) {
-        out << "Node " << g.getNode(i).name( ) << " : ";
-        const list <Node> neighbors = g.getAdjNodes ( g.getNode(i) ) ;
+        out << "Node " << g.m_nodes[i].name( ) << " : ";
+        const list <Node> neighbors = g.getAdjNodes ( g.m_nodes[i]) ;
             for( list<Node>::const_iterator itr = neighbors.begin( ) ;
                 itr!= neighbors.end( ) ; ++itr ) {
 				list<Node>::const_iterator BEnd = itr;

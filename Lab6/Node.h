@@ -1,6 +1,6 @@
 /**
 *
-*CS372: Lab5
+*CS372: Lab4, Lab5, Lab6
 *File: Node.h
 *Author: August B. Sandoval
 *Purpose: Provides the class definition for class Node

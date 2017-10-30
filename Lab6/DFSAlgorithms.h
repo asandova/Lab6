@@ -1,3 +1,11 @@
+/**
+*
+*CS372:	Lab4, Lab5, Lab6
+*File: DFSAlgorithms.h
+*Author: August B. Sandoval
+*Purpose: Provides the class definition of "static" class DFSAlgorithms
+*
+**/
 #ifndef DFSALGORITHMS_H
 #define DFSALGORITHMS_H
 
