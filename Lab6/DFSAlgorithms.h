@@ -14,7 +14,7 @@
 
 class DFSAlgorithms{
 	public:
-		static int GTime;
+		static int DFSTime;
 		static void DFS(Graph & G);
 		static void DFSRecursive(Graph & G);
 		static void DFSIterative(Graph & G);

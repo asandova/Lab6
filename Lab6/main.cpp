@@ -17,10 +17,18 @@
 using namespace std;
 
 vector<size_t> find_connected_components(Graph & G) {
-	return vector<size_t>();
+	vector<size_t> connected;
+	connected = vector<size_t>();
+	//
+	return connected;
 }
 vector<size_t> find_strongly_connected_components(Graph & G) {
-	return vector<size_t>();
+	vector<size_t> strConnected;
+	strConnected = vector<size_t>();
+
+
+
+	return strConnected;
 }
 
 
@@ -28,7 +36,7 @@ void testall(){
 
     Graph Tgraph1("Graph1.txt", true);
     //cout << Tgraph1 << endl;
-    Graph Tgraph2("Graph1.txt",true);
+    Graph Tgraph2("Graph1.txt", true);
     //Graph Tgraph3("Graph3.txt",1);
     //Tgraph1.save("Graph1out.txt");
     //Tgraph2.save("Graph2out.txt");
@@ -36,13 +44,13 @@ void testall(){
 
 
     ///test linear
-	DFSAlgorithms::GTime = 1;
+	DFSAlgorithms::DFSTime = 1;
 	DFSAlgorithms::DFSRecursive(Tgraph2);
     //cout << DFSAlgorithms::GTime << endl;
 	Tgraph2.update();
 	cout << "Graph after DFS algorithm Recursive:" << endl << Tgraph2 << endl;
     ///test recursive
-    DFSAlgorithms::GTime = 1;
+    DFSAlgorithms::DFSTime = 1;
 	//cout << "Graph before DFS algorithm Iterative:" << endl << Tgraph1 << endl;
     DFSAlgorithms::DFSIterative(Tgraph1);
 	Tgraph1.update();

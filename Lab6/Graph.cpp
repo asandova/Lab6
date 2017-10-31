@@ -42,7 +42,8 @@ bool Graph::isDirected()const {
 void Graph::update(){
 	for (size_t i = 0; i < m_nodes.size(); i++) {
 		for (list<Node>::iterator itr = m_adjList[i].begin(); itr != m_adjList[i].end(); ++itr) {
-			*itr = m_nodes[itr->id()];
+			//*itr = m_nodes[itr->id()];
+			*itr = getNode(itr->id());
 		}
 	}
 }

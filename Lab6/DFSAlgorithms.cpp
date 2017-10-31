@@ -13,7 +13,10 @@
 #include <iostream>
 
 using namespace std;
-int DFSAlgorithms::GTime = 1;
+//stores the discovery time during DFS runtime
+int DFSAlgorithms::DFSTime = 1;
+
+//define a "Null" node used in one of the DFS algorithms
 const Node DFSAlgorithms::NulNode = Node("",0);
 
 void DFSAlgorithms::DFS(Graph & G) { ///linear time DFS algorithm
@@ -38,8 +41,7 @@ void DFSAlgorithms::DFS(Graph & G) { ///linear time DFS algorithm
 }//end of DFS
 //completed
 void DFSAlgorithms::DFSRecursive(Graph & G) { /// Recursive DFS algorithm
-	//Node starting = NulNode;
-	if (G.num_nodes() == 0) { return; } //checks if the Graph is empty
+	if (G.num_nodes() == 0 ) { return; } //checks if the Graph is empty
 	Node* starting = &G.getNode(0);
 	//looks for an unexplored node and is the largest is alphabetical order
 	//once the the node is found it exits the function
@@ -51,31 +53,24 @@ void DFSAlgorithms::DFSRecursive(Graph & G) { /// Recursive DFS algorithm
 	}//end of for
 	 /// only comes here is the first node in the list is first in alphabetical order and unexplored
 	if (starting->getPreTime() != 0) { return; } //checks of the node is unexplored
-	starting->setPreTime(GTime++);
+	starting->setPreTime(DFSTime++);
 	Explore(G, starting);
-	starting->setPostTime(GTime++);
+	//starting->setPostTime(DFSTime++);
 	DFSRecursive(G);
 }//end of DFSRecursive
 //completed
 void DFSAlgorithms::Explore(Graph & G, Node *C) {
-	//check if the node has been visited
-	//base case
-	//if (C->getPreTime() != 0) { return; }
-	//sets C's pre time
-	//C->setPreTime(GTime++);
-	//C.setPreTime(GTime++);
 	//look for next node
 	list<Node> links = G.getAdjNodes(*C);
 	for (list<Node>::iterator itr = links.begin(); itr != links.end(); ++itr) {
 		if (G.getNode(itr->id()).getPreTime() == 0) {
-			G.getNode(itr->id()).setPreTime(GTime++);
+			G.getNode(itr->id()).setPreTime(DFSTime++);
 			Explore(G, &G.getNode(itr->id() ) );
+
 		}
 	}
 	//set post time
-	C->setPostTime(GTime++);
-
-	//C.setPostTime(GTime++);
+	C->setPostTime(DFSTime++);
 }
 
 void DFSAlgorithms::DFSIterative(Graph & G) {
@@ -90,10 +85,8 @@ void DFSAlgorithms::DFSIterative(Graph & G) {
 				start = &G.getNodeAt(i);
 				break;
 			}
-		}
-		//if (start->getPreTime() != 0) { return; }
-		
-		start->setPreTime(GTime++);
+		}		
+		start->setPreTime(DFSTime++);
 		dfs.push(*start);
 		while (!dfs.empty()) {
 			G.update();
@@ -103,7 +96,7 @@ void DFSAlgorithms::DFSIterative(Graph & G) {
 			if (next.empty() || G.allExplored( dfs.top().id() ) ) {
 				//if empty or all have been discovered sets posttime of top element
 				//pops top element of stack and continues with loop
-				G.getNode(dfs.top().id()).setPostTime(GTime++);
+				G.getNode(dfs.top().id()).setPostTime(DFSTime++);
 				dfs.pop();
 			}
 			else {
@@ -114,12 +107,11 @@ void DFSAlgorithms::DFSIterative(Graph & G) {
 					//checking if current node is alphabetically first compared to start and unexplored
 					if (G.getNode(itr->id()).getPreTime() == 0) {
 						start = &G.getNode(itr->id());
-						start->setPreTime(GTime++);
+						start->setPreTime(DFSTime++);
 						dfs.push(*start);
 						break;
 					}
 				}
-				
 			}//end of else - paired if -> if (next.empty())
 		}//end of while(!dfs.empty())
 	}//end of while (!G.allExplored())
