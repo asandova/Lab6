@@ -23,7 +23,8 @@ class Graph{
         vector<Node> m_nodes;
         vector< list< Node > > m_adjList;
         bool Directed;
-
+		void sortListByAlpha(size_t id);
+		void sortListByPost(size_t id);
 		
     public:
         friend ostream& operator<<(ostream & out, const Graph & g); //defined
@@ -74,6 +75,13 @@ class Graph{
         // Save a graph from adjacency lists to a tab−separated
         // text edge list file
         void save ( const string & file ) ; //defined
+		void saveRev(const string & file);
+		void reverseAdjList();
+		void clearTimes();
+		void clearCID();
+
+		void sortByAlpha();
+		void sortByPost();
 
 };
 #endif // GRAPH_H

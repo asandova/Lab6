@@ -55,8 +55,7 @@ void DFSAlgorithms::DFSRecursive(Graph & G) { /// Recursive DFS algorithm
 	if (starting->getPreTime() != 0) { return; } //checks of the node is unexplored
 	starting->setPreTime(DFSTime++);
 	Explore(G, starting);
-	//starting->setPostTime(DFSTime++);
-	DFSRecursive(G);
+	//DFSRecursive(G);
 }//end of DFSRecursive
 //completed
 void DFSAlgorithms::Explore(Graph & G, Node *C) {
@@ -66,7 +65,6 @@ void DFSAlgorithms::Explore(Graph & G, Node *C) {
 		if (G.getNode(itr->id()).getPreTime() == 0) {
 			G.getNode(itr->id()).setPreTime(DFSTime++);
 			Explore(G, &G.getNode(itr->id() ) );
-
 		}
 	}
 	//set post time

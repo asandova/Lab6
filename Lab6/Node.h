@@ -17,6 +17,7 @@ class Node {
 private:
     string m_name;
     int m_id;
+	int c_id;
     int preTime;
     int postTime;
 
@@ -33,6 +34,8 @@ public:
 
         int id()const;
         void setID(int id);
+		int C_ID()const;
+		void setC_ID(int id);
         void setPreTime(int time);
         void setPostTime(int time);
 

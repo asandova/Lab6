@@ -33,6 +33,14 @@ void Node::setID(int id){
     m_id = id;
 }
 
+int Node::C_ID()const {
+	return c_id;
+}
+void Node::setC_ID(int ID) {
+	c_id = ID;
+}
+
+
 void Node::setPreTime(int time){
     preTime = time;
 }

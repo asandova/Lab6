@@ -17,17 +17,40 @@
 using namespace std;
 
 vector<size_t> find_connected_components(Graph & G) {
+	//Input: Graph G is undirected
 	vector<size_t> connected;
 	connected = vector<size_t>();
+	if (G.num_nodes() != 0) {
+		size_t cID = 0;
+		while (!G.allExplored()) {
+			DFSAlgorithms::DFSRecursive(G);
+			G.update();
+			for (size_t i = 0; i < G.num_nodes(); i++) {
+				if (G.getNodeAt(i).getPreTime() != 0 && G.getNodeAt(i).getPreTime() != -1) {
+					G.getNodeAt(i).setPreTime(-1);
+					G.getNodeAt(i).setC_ID((int)cID);
+				}
+			}
+			connected.push_back(cID);
+			cID++;
+		}
+	}
 	//
 	return connected;
 }
 vector<size_t> find_strongly_connected_components(Graph & G) {
+	//Input: Graph G is directed
 	vector<size_t> strConnected;
 	strConnected = vector<size_t>();
-
-
-
+	if (G.num_nodes() != 0) {
+		G.reverseAdjList();//getting reverse of G
+		DFSAlgorithms::DFSIterative(G);//DFS of G
+		G.update();//updating adjlist pre & post times
+		G.reverseAdjList();//undoing reverse
+		G.sortByPost();//sorting nodes by posttime
+		G.clearTimes();//clearing pre & post times
+		strConnected = find_connected_components(G);//finding Strongly connected components
+	}
 	return strConnected;
 }
 
@@ -35,31 +58,14 @@ vector<size_t> find_strongly_connected_components(Graph & G) {
 void testall(){
 
     Graph Tgraph1("Graph1.txt", true);
-    //cout << Tgraph1 << endl;
-    Graph Tgraph2("Graph1.txt", true);
-    //Graph Tgraph3("Graph3.txt",1);
-    //Tgraph1.save("Graph1out.txt");
-    //Tgraph2.save("Graph2out.txt");
-    //Tgraph3.save("Graph3out.txt");
-
-
-    ///test linear
-	DFSAlgorithms::DFSTime = 1;
-	DFSAlgorithms::DFSRecursive(Tgraph2);
-    //cout << DFSAlgorithms::GTime << endl;
-	Tgraph2.update();
-	cout << "Graph after DFS algorithm Recursive:" << endl << Tgraph2 << endl;
-    ///test recursive
-    DFSAlgorithms::DFSTime = 1;
-	//cout << "Graph before DFS algorithm Iterative:" << endl << Tgraph1 << endl;
-    DFSAlgorithms::DFSIterative(Tgraph1);
-	Tgraph1.update();
-    cout << "Graph after DFS algorithm Iterative:"<< endl << Tgraph1 << endl;
-    ///test iterative
-    //GTime = 1;
-    //DFSItative(Tgraph3);
-    //cout << Tgraph3 << endl;
-
+	cout << Tgraph1 << endl;
+	vector<size_t> connected;
+	connected = find_strongly_connected_components(Tgraph1);
+	
+	//connected = find_connected_components(Tgraph1);
+	for (size_t i = 0; i < connected.size(); i++)
+		cout << connected[i] << " ";
+	cout << endl;
 
 }
 

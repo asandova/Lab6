@@ -42,7 +42,6 @@ bool Graph::isDirected()const {
 void Graph::update(){
 	for (size_t i = 0; i < m_nodes.size(); i++) {
 		for (list<Node>::iterator itr = m_adjList[i].begin(); itr != m_adjList[i].end(); ++itr) {
-			//*itr = m_nodes[itr->id()];
 			*itr = getNode(itr->id());
 		}
 	}
@@ -80,20 +79,30 @@ void Graph::addEdge ( const Node & a , const Node & b ) {
 	//cout << "edge " << a << " to " << b << " already exists" << endl;
 	//adds the edge from B to A if the graph is undirected
     if(!Directed){
-        if( m_adjList[b.id()].empty() ){
-            m_adjList[b.id()].push_back(a);
-        }
-        else if(!NodeExistAdj( a, b.id() ) ){
-            list<Node> adjList = getAdjNodes(b);
-            for(list<Node>::iterator itr = m_adjList[b.id()].begin(); itr != m_adjList[a.id()].end(); ++itr){
-                if(*itr > a){
-                    //--itr;
-                    m_adjList[b.id()].insert(itr,a);
-                    return;
-                }//end of if
-            }//end of for loop
-                m_adjList[b.id()].push_back(a);
-        }//end of else if
+		if (m_adjList[b.id()].empty()) {
+			m_adjList[b.id()].push_back(a);
+			//cout << "created edge: " << a << " to " << b << endl;
+		}
+		if (m_adjList[b.id()].empty()) {
+			m_adjList[b.id()].push_back(a);
+			//cout << "created edge: " << a << " to " << b << endl;
+			if (Directed)
+				return;
+		}
+		else if (!NodeExistAdj(a, b.id())) {
+			if (m_adjList[b.id()].front() > a) {
+				m_adjList[b.id()].push_front(a);
+				//cout << "created edge: " << b << " to " << a << endl;
+				return;
+			}
+			for (list<Node>::iterator itr = m_adjList[b.id()].begin(); itr != m_adjList[b.id()].end(); ++itr) {
+				if (*itr > a) {
+					m_adjList[b.id()].insert(itr, a);
+					//cout << "created edge: " << a << " to " << b << endl;
+					return;
+				}
+			}
+		}
     }//end of if directed
 
 }//end of add edge
@@ -299,12 +308,68 @@ void Graph::save( const string & file ){
         ofstream OFile;
         OFile.open(file.c_str(), ofstream::out);
         for(size_t i =0; i < m_nodes.size(); i++){
-            const list<Node> neighbors = getAdjNodes( getNode(i) );
-            for(list<Node>::const_iterator itr = neighbors.begin(); itr!= neighbors.end(); ++itr){
-                    OFile << getNode(i).name() << "\t" << itr->name() << "\n";
-            }
+            const list<Node> neighbors = getAdjNodes( getNodeAt(i) );
+			for (list<Node>::const_iterator itr = neighbors.begin(); itr != neighbors.end(); ++itr){
+				list<Node>::const_iterator Nitr = itr;
+				if ( i + 1 == m_nodes.size() && ++Nitr == neighbors.end()){
+					OFile << getNodeAt(i).name() << "\t" << itr->name();
+				}
+				else {
+					OFile << getNodeAt(i).name() << "\t" << itr->name() << "\n";
+				}
+			}
         }
         OFile.close();
+}
+
+void Graph::saveRev(const string & file) {
+	//NOTE: the method assumes the file does not exist and will overwrite
+	// if the file does exist
+	//cout << "in save" << endl;
+	ofstream OFile;
+	OFile.open(file.c_str(), ofstream::out);
+	for (size_t i = 0; i < m_nodes.size(); i++) {
+		const list<Node> neighbors = getAdjNodes(getNodeAt(i));
+		for (list<Node>::const_iterator itr = neighbors.begin(); itr != neighbors.end(); ++itr) {
+			list<Node>::const_iterator Nitr = itr;
+			if (i + 1 == m_nodes.size() && ++Nitr == neighbors.end()) {
+				OFile << itr->name() << "\t" << getNode(i).name();
+			}
+			else {
+				OFile << itr->name() << "\t" << getNode(i).name() << "\n";
+			}
+		}
+	}
+	OFile.close();
+}
+//only reverses directed graph
+void Graph::reverseAdjList() {
+	if (Directed) {
+		vector <list<Node> > R_adj;
+		R_adj = vector<list<Node> >();
+		R_adj.resize(m_adjList.size());
+
+		for (size_t i = 0; i < m_adjList.size(); i++) {
+			for (list<Node>::const_iterator itr = getAdjNodes(getNode(i)).begin(); itr != getAdjNodes(getNode(i)).end(); ++itr) {
+				R_adj[itr->id()].push_back(getNode(i));
+			}
+		}
+		m_adjList = R_adj;
+	}
+}
+
+void Graph::clearTimes() {
+	for (size_t i = 0; i < m_nodes.size(); i++) {
+		m_nodes[i].setPreTime(0);
+		m_nodes[i].setPostTime(0);
+	}
+	update();
+}
+void Graph::clearCID() {
+	for (size_t i = 0; i < m_nodes.size(); i++) {
+		m_nodes[i].setC_ID(NULL);
+	}
+	update();
 }
 
 ostream& operator<<(ostream & out, const Graph & g){
@@ -336,3 +401,78 @@ ostream& operator<<(ostream & out, const Graph & g){
     }
     return out;
 }
+
+void Graph::sortByAlpha() {
+	//sort m_nodes
+	int size = m_nodes.size();
+	for (size_t gap = size / 2; gap > 0; gap /= 2) {
+		
+		for (size_t i = gap; i < size; i++) {
+			Node temp = m_nodes[i];
+			size_t j;
+			for (j = i; j >= gap && m_nodes[j - gap] > temp; j -= gap) {
+				m_nodes[j] = m_nodes[j - gap];
+			}
+			m_nodes[j] = temp;
+		}
+	}
+	//sort adj_list
+	for (size_t i = 0; i < size; i++) {
+		if(m_adjList[i].size() > 1)
+			sortListByAlpha(i);
+	}
+
+}
+void Graph::sortListByAlpha(size_t id) {
+	list<Node>::iterator itr1, itr2, toSwap;
+	Node temp;
+	for (itr1 = m_adjList[id].begin(); itr1 != m_adjList[id].end(); ++itr1) {
+		toSwap = itr1;
+		for ( itr2 = itr1; itr2 != m_adjList[id].end(); ++itr2) {
+			if (*itr2 < *itr1) {
+				toSwap = itr2;
+			}
+		}
+		temp = *toSwap;
+		*toSwap = *itr1;
+		*itr1 = temp;
+	}
+}
+
+void Graph::sortByPost(){
+	//sort m_nodes
+	int size = m_nodes.size();
+	for (size_t gap = size / 2; gap > 0; gap /= 2) {
+
+		for (size_t i = gap; i < size; i++) {
+			Node temp = m_nodes[i];
+			size_t j;
+			for (j = i; j >= gap && m_nodes[j - gap].getPostTime() < temp.getPostTime(); j -= gap) {
+				m_nodes[j] = m_nodes[j - gap];
+			}
+			m_nodes[j] = temp;
+		}
+	}
+
+	//sort adj_list
+	for (size_t i = 0; i < size; i++) {
+		if (m_adjList[i].size() > 1)
+			sortListByPost(i);
+	}
+}
+void Graph::sortListByPost(size_t id) {
+	list<Node>::iterator itr1, itr2,toSwap;
+	Node temp;
+	for (itr1 = m_adjList[id].begin(); itr1 != m_adjList[id].end(); ++itr1) {
+		toSwap = itr1;
+		for (itr2 = itr1; itr2 != m_adjList[id].end(); ++itr2) {
+			if (itr2->getPostTime() > itr1->getPostTime()) {
+				toSwap = itr2;
+			}
+		}
+		temp = *toSwap;
+		*toSwap = *itr1;
+		*itr1 = temp;
+	}
+}
+
