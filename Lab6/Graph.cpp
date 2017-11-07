@@ -20,6 +20,12 @@
 
 using namespace std;
 
+Graph::Graph() {
+	Directed = false;
+	m_nodes = vector<Node>();
+	m_adjList = vector<list<Node> >();
+}
+
 Graph::Graph(const string & file, bool dir){
     Directed = dir;
     m_nodes = vector<Node>();
@@ -182,7 +188,7 @@ const Node & Graph::getNode ( size_t id )const{
 			return m_nodes[i];
 	}
 	//should never get here
-	return Node("", 0);
+	//return Node("", 0);
 }
 
 Node & Graph::getNode(size_t id) {
@@ -194,7 +200,7 @@ Node & Graph::getNode(size_t id) {
 			return m_nodes[i];
 	}
 	//should never get here
-	return Node("", 0);
+	//return Node("", 0);
 }
 
 Node& Graph::getNodeAt(size_t i) {
@@ -233,6 +239,14 @@ bool Graph::allExplored()const {
 	return true;
 }
 
+bool Graph::allHaveComponent()const {
+	for (size_t i = 0; i < m_nodes.size(); i++) {
+		if (m_nodes[i].C_ID() == -1)
+			return false;
+	}
+	return true;
+}
+
 // Return the total number of nodes i n the graph
 size_t Graph::num_nodes ( ) const {
     return m_nodes.size( ) ;
@@ -254,7 +268,10 @@ vector<string> split(const string& a){
 // Create a graph from a tab−separated text edge list file
 // to adjacency lists
 void Graph::scan ( const string & file ){
-
+	if (!m_nodes.empty()) {
+		m_nodes.clear();
+		m_adjList.clear();
+	}
     //char* line;
     string fline;
     int id = 0;

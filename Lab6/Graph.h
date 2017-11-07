@@ -29,6 +29,7 @@ class Graph{
     public:
         friend ostream& operator<<(ostream & out, const Graph & g); //defined
 		void update();
+		Graph();
         Graph(const string & file);
         Graph(const string & file, bool dir);
 		bool isDirected()const;
@@ -65,6 +66,7 @@ class Graph{
 
         bool allExplored(size_t id)const;
 		bool allExplored()const;
+		bool allHaveComponent()const;
         // Return the total number of nodes i n the graph
         size_t num_nodes ( ) const; //defined
 

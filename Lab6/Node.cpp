@@ -14,6 +14,7 @@ using namespace std;
 
 Node::Node(){
     m_name = "NULL";
+	c_id = -1;
     preTime = 0;
     postTime = 0;
 };
@@ -21,6 +22,7 @@ Node::Node(){
 Node::Node(const string & name, int id){
         m_name = name;
         m_id = id;
+		c_id = -1;
         preTime = 0;
         postTime = 0;
 }

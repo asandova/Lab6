@@ -46,8 +46,8 @@ void DFSAlgorithms::DFSRecursive(Graph & G) { /// Recursive DFS algorithm
 	//looks for an unexplored node and is the largest is alphabetical order
 	//once the the node is found it exits the function
 	for (size_t i = 0; i < G.num_nodes(); i++) {
-		if (G.getNode(i).getPreTime() == 0) {
-				starting = &G.getNode(i);
+		if (G.getNodeAt(i).getPreTime() == 0) {
+				starting = &G.getNodeAt(i);
 				break;
 		}//end of if
 	}//end of for
@@ -55,7 +55,7 @@ void DFSAlgorithms::DFSRecursive(Graph & G) { /// Recursive DFS algorithm
 	if (starting->getPreTime() != 0) { return; } //checks of the node is unexplored
 	starting->setPreTime(DFSTime++);
 	Explore(G, starting);
-	//DFSRecursive(G);
+	DFSRecursive(G);
 }//end of DFSRecursive
 //completed
 void DFSAlgorithms::Explore(Graph & G, Node *C) {
