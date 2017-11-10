@@ -20,18 +20,19 @@ vector<size_t> find_connected_components(Graph & G);
 vector<size_t> find_strongly_connected_components(Graph & G);
 
 // [[Rcpp::export]]
-void warpCon(string filename){
+void wrapCon(string filename){
   Graph test = Graph(filename);
   find_connected_components(test);
 }
 
 // [[Rcpp::export]]
-void warpStrCon(string filename){
+void wrapStrCon(string filename){
   Graph test = Graph(filename);
   find_connected_components(test);
+    
+    cout<<test<<endl;
 }
 
-// [[Rcpp::export]]
 vector<size_t> find_connected_components(Graph & G) {
 	//Input: Graph G is undirected
 	vector<size_t> connected;
@@ -63,7 +64,6 @@ vector<size_t> find_connected_components(Graph & G) {
 	return connected;
 }
 
-// [[Rcpp::export]]
 vector<size_t> find_strongly_connected_components(Graph & G) {
 	//Input: Graph G is directed
 	vector<size_t> strConnected;
@@ -107,8 +107,9 @@ void testall(){
 
 int main(){
 
-    testall();
-
+    //testall();
+    wrapStrCon("Lab6_Test.txt");
+    
     return 0;
 }
 
@@ -116,23 +117,23 @@ int main(){
 
 require("igraph")
 source("random_graph.R")
-edges.num <- c(1000, 2000, 3000)
-nodes.num <- c(1000, 2000, 3000)
-runtime <- vector(length = 5)
-for(i in c(1:5)){
-  random.graph(nodes.num[i], edges.num[i], "Lab6_Test.txt")
-  
-  links <- read.table("file.txt", header = F, quote = "", stringsAsFactors = F)
+edges.num <- c(20)
+nodes.num <- c(20)
+runtime <- vector(length = 1)
+for(i in c(1:1)){
+ random.graph(nodes.num[i], edges.num[i], "Lab6_Test.txt")
+
+  links <- read.table("Lab6_Test.txt", header = F, quote = "", stringsAsFactors = F)
   names(links) <- c("from", "to")
   #links <- data.frame( from=c("a", "a", "c", "d", "e" ),
   #                                         to = c("d", "b", "b", "c", "a"))
   net <- graph_from_data_frame(d=links, directed=T)
-  #plot(net, vertex.size=30, vertex.label.cex=2)
-  
-  net <- graph_from_data_frame(d=links, directed=F)
+  plot(net, vertex.size=30, vertex.label.cex=2)
+
+  #net <- graph_from_data_frame(d=links, directed=F)
   #plot(net, vertex.size=30,vertex.label.cex=2)
-  
-  runtime[i] <- system.time(wrapCon("Lab6_Test.txt") )["user.self"]
+
+  runtime[i] <- system.time(wrapStrCon("Lab6_Test.txt") )["user.self"]
 }
  
 }

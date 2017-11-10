@@ -257,7 +257,7 @@ vector<string> split(const string& a){
     vector<string> names;
     for(size_t i = 0; i < a.size()-1; i++ ){
         if(a[i] == '\t'){
-            names.push_back( a.substr(0, i-1)   ) ;
+            names.push_back( a.substr(0, i)   ) ;
             names.push_back( a.substr(i+1, a.size() ) );
             break;
         }
@@ -281,34 +281,36 @@ void Graph::scan ( const string & file ){
     if(  iFile.is_open()  ){
         while( !iFile.eof() ){
                 getline(iFile, fline);
-                //string L(line);
-                //vector<string> names = split(fline);
-                vector<string>names(2);
-                names[0] = fline.c_str()[0];
-                names[1] = fline.c_str()[2];
-				//cout << endl <<"read in: "<< fline << endl;
-                if(!NodeExist( names[0] ) ){
-                        N1 = Node( names[0],id++) ;
-                        //N1 = tmp1;
-						addNode(N1);
-                }else{
-					//cout << "Node with name " << names[0] << " exist" << endl;
-                    N1 = getNode( findID( names[0] ) ) ;
-					//cout << "Existing: N1-" << N1 << endl;
-                }
-				//cout << "N1: " << N1 << endl;
-                if(!NodeExist( names[1] ) ){
-                        N2 = Node( names[1] ,id++);
-                        //N2 = tmp2;
-                        addNode( N2 ) ;
-                }else{
-						//cout << "Node with name" << names[1] << " exist" << endl;
-                        N2 = getNode( findID( names[1] ) ) ;
-                }
-				//cout << "N2: " << N2 << endl;
-				//cout << N1 << endl << N2 << endl;
-                addEdge(N1, N2);
+                string L(fline);
+				if (fline.size() >= 3) {
+					vector<string> names = split(fline);
+					//vector<string>names(2);
+					//names[0] = fline.c_str()[0];
+					//names[1] = fline.c_str()[2];
+					//cout << endl <<"read in: "<< fline << endl;
 
+					if(!NodeExist( names[0] ) ){
+							N1 = Node( names[0],id++) ;
+							//N1 = tmp1;
+							addNode(N1);
+					}else{
+						//cout << "Node with name " << names[0] << " exist" << endl;
+						N1 = getNode( findID( names[0] ) ) ;
+						//cout << "Existing: N1-" << N1 << endl;
+					}
+					//cout << "N1: " << N1 << endl;
+					if(!NodeExist( names[1] ) ){
+							N2 = Node( names[1] ,id++);
+							//N2 = tmp2;
+							addNode( N2 ) ;
+					}else{
+							//cout << "Node with name" << names[1] << " exist" << endl;
+							N2 = getNode( findID( names[1] ) ) ;
+					}
+					//cout << "N2: " << N2 << endl;
+					//cout << N1 << endl << N2 << endl;
+					addEdge(N1, N2);
+				}
         }//end of while
         iFile.close();
     }else{
