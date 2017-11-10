@@ -17,6 +17,7 @@ Node::Node(){
 	c_id = -1;
     preTime = 0;
     postTime = 0;
+	depth = -1;
 };
 
 Node::Node(const string & name, int id){
@@ -25,6 +26,7 @@ Node::Node(const string & name, int id){
 		c_id = -1;
         preTime = 0;
         postTime = 0;
+		depth = -1;
 }
 
 int Node::id()const{
@@ -42,6 +44,14 @@ void Node::setC_ID(int ID) {
 	c_id = ID;
 }
 
+
+void Node::setDepth(int d) {
+	depth = d;
+}
+
+int Node::getDepth()const {
+	return depth;
+}
 
 void Node::setPreTime(int time){
     preTime = time;

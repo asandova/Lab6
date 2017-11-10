@@ -17,9 +17,11 @@ class Node {
 private:
     string m_name;
     int m_id;
+	int depth;
 	int c_id;
     int preTime;
     int postTime;
+	
 
 public:
         Node();
@@ -38,6 +40,9 @@ public:
 		void setC_ID(int id);
         void setPreTime(int time);
         void setPostTime(int time);
+
+		int getDepth()const;
+		void setDepth(int d);
 
         int getPreTime()const;
         int getPostTime()const;

@@ -393,6 +393,7 @@ void Graph::clearCID() {
 
 ostream& operator<<(ostream & out, const Graph & g){
     out << "Nodes in "<< ( ( g.Directed )? "Directed" : "Undirected") << " graph: " << endl ;
+	out << "Node pre/post times: \"name\" (pre,post)" << endl;
 	for (unsigned i = 0; i < g.num_nodes(); i++) {
 		if (i + 1 == g.num_nodes()) {
 			out << g.m_nodes[i].name() << " (" << g.m_nodes[i].getPreTime() << ", "
@@ -404,6 +405,28 @@ ostream& operator<<(ostream & out, const Graph & g){
 		}
     }
     out << endl ;
+	out << "Node IDs : \"name\"[ID,cID]" << endl;
+	for (unsigned i = 0; i < g.num_nodes(); i++) {
+		if (i + 1 == g.num_nodes()) {
+			out << g.m_nodes[i].name() << " [" << g.m_nodes[i].id() << ", "
+				<< g.m_nodes[i].C_ID() << "]";
+		}
+		else {
+			out << g.m_nodes[i].name() << " [" << g.m_nodes[i].id() << ", "
+				<< g.m_nodes[i].C_ID() << "]" << ", ";
+		}
+	}
+	out << endl;
+	out << "Node Depth : \"name\"(depth)" << endl;
+	for (unsigned i = 0; i < g.num_nodes(); i++) {
+		if (i + 1 == g.num_nodes()) {
+			out << g.m_nodes[i].name() << " (" << g.m_nodes[i].getDepth() << ")";
+		}
+		else {
+			out << g.m_nodes[i].name() << " (" << g.m_nodes[i].getDepth() << ")" << ", ";
+		}
+	}
+	out << endl;
     out << "Adjacency list of the graph : " << endl ;
     for ( unsigned i =0; i <g.num_nodes( ) ; i ++) {
         out << "Node " << g.m_nodes[i].name( ) << " : ";

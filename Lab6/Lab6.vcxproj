@@ -111,11 +111,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BFSAlgorithms.h" />
     <ClInclude Include="DFSAlgorithms.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Node.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BFSAlgorithms.cpp" />
     <ClCompile Include="DFSAlgorithms.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />

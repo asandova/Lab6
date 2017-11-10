@@ -14,6 +14,7 @@
 #include "Node.h"
 #include "Graph.h"
 #include "DFSAlgorithms.h"
+#include "BFSAlgorithms.h"
 
 using namespace std;
 vector<size_t> find_connected_components(Graph & G);
@@ -85,7 +86,10 @@ vector<size_t> find_strongly_connected_components(Graph & G) {
 
 void testall(){
     Graph Tgraph1("Graph1.txt", true);
-	Graph Tgraph2;
+	BFSAlgorithms::BFS(Tgraph1,Tgraph1.getNode(0));
+	Tgraph1.update();
+	cout << Tgraph1 << endl;
+	//Graph Tgraph2;
 	/*
 	cout << Tgraph1 << endl;
 	vector<size_t> connected;
@@ -95,20 +99,19 @@ void testall(){
 	for (size_t i = 0; i < connected.size(); i++)
 		cout << connected[i] << " ";
 	cout << endl;
-	*/
 	for (size_t i = 1; i < 5; i++) {
 		Tgraph1.scan("Lab6_Test.txt");
 			Tgraph2 = Tgraph1;
 		find_strongly_connected_components(Tgraph1);
 		find_connected_components(Tgraph2);
-   }
+   }*/
 	
 }
 
 int main(){
 
-    //testall();
-    wrapStrCon("Lab6_Test.txt");
+    testall();
+    //wrapStrCon("Lab6_Test.txt");
     
     return 0;
 }
@@ -134,6 +137,8 @@ for(i in c(1:1)){
   #plot(net, vertex.size=30,vertex.label.cex=2)
 
   runtime[i] <- system.time(wrapStrCon("Lab6_Test.txt") )["user.self"]
+  #plot( 20 ,runtime, type="b", xlab="n", ylab = "runtime (seconds)")
+ 
 }
  
 }
