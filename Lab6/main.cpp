@@ -85,10 +85,20 @@ vector<size_t> find_strongly_connected_components(Graph & G) {
 
 
 void testall(){
-    Graph Tgraph1("Graph1.txt", true);
-	BFSAlgorithms::BFS(Tgraph1,Tgraph1.getNode(0));
-	Tgraph1.update();
-	cout << Tgraph1 << endl;
+	vector<Graph> graphs;
+	graphs.push_back( Graph("Graph1.txt", true));
+	graphs.push_back( Graph("Graph2.txt", true));
+	graphs.push_back( Graph("Graph3.txt", true));
+	graphs.push_back( Graph("Graph4.txt", true));
+	graphs.push_back( Graph("Graph5.txt", true));
+
+	for (size_t i = 0; i < graphs.size(); i++) {
+		BFSAlgorithms::BFS(graphs[i], graphs[i].getNode(0));
+		graphs[i].update();
+		cout << graphs[i] << endl;
+	}
+
+
 	//Graph Tgraph2;
 	/*
 	cout << Tgraph1 << endl;
